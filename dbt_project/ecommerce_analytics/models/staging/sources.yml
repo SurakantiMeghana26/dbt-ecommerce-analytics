@@ -1,0 +1,54 @@
+version: 2
+
+sources:
+  - name: raw_data
+    description: "Raw e-commerce data from Olist (Brazilian marketplace)"
+    database: ECOMMERCE_ANALYTICS
+    schema: RAW_DATA
+    
+    tables:
+      - name: raw_customers
+        description: "Customer information"
+        columns:
+          - name: customer_id
+            description: "Unique customer identifier"
+            tests:
+              - not_null
+              - unique
+      
+      - name: raw_orders
+        description: "Order details and status"
+        columns:
+          - name: order_id
+            description: "Unique order identifier"
+            tests:
+              - not_null
+              - unique
+          - name: customer_id
+            description: "FK to raw_customers"
+            tests:
+              - not_null
+      
+      - name: raw_order_items
+        description: "Items within each order"
+      
+      - name: raw_payments
+        description: "Payment information per order"
+      
+      - name: raw_reviews
+        description: "Customer reviews for orders"
+      
+      - name: raw_products
+        description: "Product catalog"
+        columns:
+          - name: product_id
+            description: "Unique product identifier"
+            tests:
+              - not_null
+              - unique
+      
+      - name: raw_sellers
+        description: "Seller information"
+      
+      - name: raw_category_translations
+        description: "Product category name translations"
