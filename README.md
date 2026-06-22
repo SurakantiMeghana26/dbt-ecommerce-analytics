@@ -52,59 +52,25 @@ Transforming raw CSV files from Kaggle's Olist dataset into a queryable star sch
 - Schema: `MARTS`
 
 ---
+
 ## ⭐ Star Schema Data Model
 
-### Schema Diagram
+### Dimensions (4)
 
-The star schema connects fact tables in the center to dimension tables around them:
+- **dim_customers** - Customer profiles with VIP/Repeat/One-time segmentation (99,441 rows)
+- **dim_products** - Product catalog with bilingual categories (32,951 rows)
+- **dim_sellers** - Seller info with revenue tiers (3,095 rows)
+- **dim_dates** - Time dimension covering 2016-2026 (4,018 rows)
 
-     ┌────────────────────┐
-                │   dim_customers    │
-                │     (99,441)       │
-                └─────────┬──────────┘
-                          │
-                          │ FK
-                          ▼
-                          ┌──────────────────┐  ┌──────────────┐  ┌──────────────────┐
+### Facts (2)
 
-│   dim_products   │  │ fact_orders  │  │   dim_sellers    │
-
-│     (32,951)     │◄─│   (99,441)   │─►│     (3,095)      │
-
-└─────────┬────────┘  └──────┬───────┘  └─────────┬────────┘
-
-│                  │                    │
-
-│                  │ 1:N                │
-
-│                  ▼                    │
-
-│     ┌─────────────────────┐          │
-
-└────►│  fact_order_items   │◄─────────┘
-
-│      (112,650)      │
-
-└──────────┬──────────┘
-
-│
-
-│ FK
-
-▼
-
-┌────────────────────┐
-
-│    dim_dates       │
-
-│      (4,018)       │
-
-└────────────────────┘
+- **fact_orders** - One row per order with order-level metrics (99,441 rows)
+- **fact_order_items** - One row per item with item-level details (112,650 rows)
 
 ### Relationships
 
-- **fact_orders** → links to dim_customers and dim_dates
-- **fact_order_items** → links to dim_products, dim_sellers, dim_dates, and fact_orders
+- fact_orders connects to dim_customers and dim_dates
+- fact_order_items connects to dim_products, dim_sellers, dim_dates, and fact_orders
 - All foreign keys use surrogate keys (integers) for fast joins
 
 ### Dimension Tables
