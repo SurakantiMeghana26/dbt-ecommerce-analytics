@@ -1,16 +1,8 @@
-\# 🛒 dbt E-Commerce Analytics Pipeline
+\# dbt E-Commerce Analytics Pipeline
 
 
 
-!\[dbt](https://img.shields.io/badge/dbt-1.11-orange)
-
-!\[Snowflake](https://img.shields.io/badge/Snowflake-Cloud-blue)
-
-!\[Python](https://img.shields.io/badge/Python-3.13-green)
-
-
-
-A complete data warehouse implementation using \*\*dbt\*\* and \*\*Snowflake\*\* for Brazilian e-commerce analytics. This project demonstrates \*\*dimensional modeling\*\*, \*\*medallion architecture\*\*, and modern data engineering best practices.
+A complete data warehouse implementation using dbt and Snowflake for Brazilian e-commerce analytics. This project demonstrates dimensional modeling, medallion architecture, and modern data engineering best practices.
 
 
 
@@ -18,31 +10,31 @@ A complete data warehouse implementation using \*\*dbt\*\* and \*\*Snowflake\*\*
 
 
 
-\## 📊 Project Overview
+\## Project Overview
 
 
 
-This project transforms raw Brazilian e-commerce data (\~550K rows across 8 source tables) into a \*\*business-ready dimensional data warehouse\*\* using a 3-layer medallion architecture (Raw → Staging → Marts).
+This project transforms raw Brazilian e-commerce data (\~550K rows across 8 source tables) into a business-ready dimensional data warehouse using a 3-layer medallion architecture (Raw → Staging → Marts).
 
 
 
-\### 🎯 Key Achievements
+\### Key Achievements
 
 
 
-\- ✅ Built \*\*14 dbt models\*\* with calculated business metrics
+\- Built 14 dbt models with calculated business metrics
 
-\- ✅ Implemented \*\*Kimball star schema\*\* with 4 dimensions and 2 facts
+\- Implemented Kimball star schema with 4 dimensions and 2 facts
 
-\- ✅ Processed \*\*550,000+ rows\*\* of real e-commerce data
+\- Processed 550,000+ rows of real e-commerce data
 
-\- ✅ Applied \*\*business logic\*\* (customer segmentation, seller tiering)
+\- Applied business logic (customer segmentation, seller tiering)
 
-\- ✅ Created \*\*bilingual product categories\*\* (Portuguese/English)
+\- Created bilingual product categories (Portuguese/English)
 
-\- ✅ Generated \*\*comprehensive date dimension\*\* (4,000+ dates)
+\- Generated comprehensive date dimension (4,000+ dates)
 
-\- ✅ Followed \*\*software engineering best practices\*\* (Git, testing, documentation)
+\- Followed software engineering best practices (Git, testing, documentation)
 
 
 
@@ -50,7 +42,7 @@ This project transforms raw Brazilian e-commerce data (\~550K rows across 8 sour
 
 
 
-\## 🏗️ Architecture
+\## Architecture
 
 
 
@@ -58,29 +50,33 @@ This project transforms raw Brazilian e-commerce data (\~550K rows across 8 sour
 
 
 
-```
+The project follows a 3-layer medallion architecture:
 
-LAYER 1: RAW (Bronze)
 
-└── 8 source tables from Kaggle Olist dataset
 
-&#x20;               ⬇
+\*\*Layer 1: RAW (Bronze)\*\*
 
-LAYER 2: STAGING (Silver)
+\- 8 source tables from Kaggle Olist dataset
 
-└── 8 cleaned views with standardization
+\- Original CSV data loaded into Snowflake
 
-&#x20;               ⬇
 
-LAYER 3: MARTS (Gold)
 
-└── Star schema for analytics
+\*\*Layer 2: STAGING (Silver)\*\*
 
-&#x20;   • 4 Dimension tables
+\- 8 cleaned views with standardization
 
-&#x20;   • 2 Fact tables (different grains)
+\- Data type conversions, null handling, calculated columns
 
-```
+
+
+\*\*Layer 3: MARTS (Gold)\*\*
+
+\- Star schema for analytics
+
+\- 4 Dimension tables
+
+\- 2 Fact tables (different grains)
 
 
 
@@ -88,11 +84,11 @@ LAYER 3: MARTS (Gold)
 
 
 
-\## ⭐ Star Schema Design
+\## Star Schema Design
 
 
 
-The project implements a \*\*Kimball star schema\*\* with 4 dimensions and 2 fact tables at different grains.
+The project implements a Kimball star schema with 4 dimensions and 2 fact tables at different grains.
 
 
 
@@ -104,13 +100,13 @@ The project implements a \*\*Kimball star schema\*\* with 4 dimensions and 2 fac
 
 |-------|-------------|------|
 
-| `dim\_customers` | Customer info with VIP/Repeat segmentation | 99,441 |
+| dim\_customers | Customer info with VIP/Repeat segmentation | 99,441 |
 
-| `dim\_products` | Products with bilingual categories | 32,951 |
+| dim\_products | Products with bilingual categories | 32,951 |
 
-| `dim\_sellers` | Sellers with revenue tiers | 3,095 |
+| dim\_sellers | Sellers with revenue tiers | 3,095 |
 
-| `dim\_dates` | Date dimension 2016-2026 | 4,018 |
+| dim\_dates | Date dimension 2016-2026 | 4,018 |
 
 
 
@@ -122,9 +118,9 @@ The project implements a \*\*Kimball star schema\*\* with 4 dimensions and 2 fac
 
 |-------|-------|-------------|------|
 
-| `fact\_orders` | One row per order | Order-level metrics | 99,441 |
+| fact\_orders | One row per order | Order-level metrics | 99,441 |
 
-| `fact\_order\_items` | One row per item | Item-level details | 112,650 |
+| fact\_order\_items | One row per item | Item-level details | 112,650 |
 
 
 
@@ -132,21 +128,15 @@ The project implements a \*\*Kimball star schema\*\* with 4 dimensions and 2 fac
 
 
 
-| \*\*fact\_orders\*\* | \*\*fact\_order\_items\*\* |
-
-|-----------------|----------------------|
-
-| One row per \*\*order\*\* | One row per \*\*item in order\*\* |
-
-| Order-level metrics | Item-level details |
-
-| \~99,441 rows | \~112,650 rows |
-
-| For order analysis | For product/seller analysis |
+The fact\_orders table has one row per order with order-level metrics like total amount, status, and delivery info.
 
 
 
-This follows \*\*Kimball's dimensional modeling\*\* best practices for handling header-line item patterns.
+The fact\_order\_items table has one row per item with item-level details like product, seller, and price.
+
+
+
+This separation follows Kimball's dimensional modeling best practices for handling header-line item patterns, prevents data duplication, and allows correct counts at each grain.
 
 
 
@@ -154,7 +144,7 @@ This follows \*\*Kimball's dimensional modeling\*\* best practices for handling 
 
 
 
-\## 🛠️ Tech Stack
+\## Tech Stack
 
 
 
@@ -162,15 +152,15 @@ This follows \*\*Kimball's dimensional modeling\*\* best practices for handling 
 
 |-------|------------|
 
-| \*\*Data Warehouse\*\* | Snowflake |
+| Data Warehouse | Snowflake |
 
-| \*\*Transformation\*\* | dbt (data build tool) |
+| Transformation | dbt (data build tool) |
 
-| \*\*Data Loading\*\* | Python (snowflake-connector-python) |
+| Data Loading | Python (snowflake-connector-python) |
 
-| \*\*Version Control\*\* | Git + GitHub |
+| Version Control | Git + GitHub |
 
-| \*\*Language\*\* | SQL + Jinja templating |
+| Language | SQL + Jinja templating |
 
 
 
@@ -178,7 +168,7 @@ This follows \*\*Kimball's dimensional modeling\*\* best practices for handling 
 
 
 
-\## 📁 Project Structure
+\## Project Structure
 
 
 
@@ -196,57 +186,15 @@ dbt-ecommerce-analytics/
 
 │       │   ├── staging/                # 8 staging models
 
-│       │   │   ├── sources.yml
-
-│       │   │   ├── stg\_customers.sql
-
-│       │   │   ├── stg\_orders.sql
-
-│       │   │   ├── stg\_order\_items.sql
-
-│       │   │   ├── stg\_payments.sql
-
-│       │   │   ├── stg\_reviews.sql
-
-│       │   │   ├── stg\_products.sql
-
-│       │   │   ├── stg\_sellers.sql
-
-│       │   │   └── stg\_category\_translations.sql
-
-│       │   │
-
 │       │   └── marts/                  # 6 dimensional models
-
-│       │       ├── dim\_customers.sql
-
-│       │       ├── dim\_products.sql
-
-│       │       ├── dim\_sellers.sql
-
-│       │       ├── dim\_dates.sql
-
-│       │       ├── fact\_orders.sql
-
-│       │       └── fact\_order\_items.sql
-
-│       │
 
 │       ├── macros/                     # Reusable code
 
-│       │   └── generate\_schema\_name.sql
-
-│       │
-
 │       └── dbt\_project.yml
-
-│
 
 ├── src/                                # Python loading script
 
 │   └── load\_data\_to\_snowflake.py
-
-│
 
 ├── .gitignore
 
@@ -262,7 +210,7 @@ dbt-ecommerce-analytics/
 
 
 
-\## 🚀 Setup Instructions
+\## Setup Instructions
 
 
 
@@ -282,7 +230,7 @@ dbt-ecommerce-analytics/
 
 
 
-```bash
+```
 
 git clone https://github.com/SurakantiMeghana26/dbt-ecommerce-analytics.git
 
@@ -296,7 +244,7 @@ cd dbt-ecommerce-analytics
 
 
 
-```bash
+```
 
 pip install snowflake-connector-python pandas
 
@@ -310,7 +258,7 @@ pip install dbt-snowflake
 
 
 
-```sql
+```
 
 USE ROLE ACCOUNTADMIN;
 
@@ -336,7 +284,7 @@ Set environment variables for security:
 
 
 
-```bash
+```
 
 export SNOWFLAKE\_USER='your\_username'
 
@@ -350,7 +298,7 @@ Run the loading script:
 
 
 
-```bash
+```
 
 python src/load\_data\_to\_snowflake.py
 
@@ -362,31 +310,15 @@ python src/load\_data\_to\_snowflake.py
 
 
 
-```bash
+```
 
 cd dbt\_project/ecommerce\_analytics
 
-
-
-\# Test connection
-
 dbt debug
-
-
-
-\# Run all models
 
 dbt run
 
-
-
-\# Run tests
-
 dbt test
-
-
-
-\# Generate documentation
 
 dbt docs generate
 
@@ -400,7 +332,7 @@ dbt docs serve
 
 
 
-\## 📈 Models Documentation
+\## Models Documentation
 
 
 
@@ -408,25 +340,25 @@ dbt docs serve
 
 
 
-| Model | Description | Source |
+| Model | Description |
 
-|-------|-------------|--------|
+|-------|-------------|
 
-| `stg\_customers` | Cleaned customer info with UPPERCASE locations | raw\_customers |
+| stg\_customers | Cleaned customer info with UPPERCASE locations |
 
-| `stg\_orders` | Orders with proper timestamps, delivery metrics | raw\_orders |
+| stg\_orders | Orders with proper timestamps, delivery metrics |
 
-| `stg\_order\_items` | Items with calculated total costs | raw\_order\_items |
+| stg\_order\_items | Items with calculated total costs |
 
-| `stg\_payments` | Payments with categorization | raw\_payments |
+| stg\_payments | Payments with categorization |
 
-| `stg\_reviews` | Reviews with sentiment analysis | raw\_reviews |
+| stg\_reviews | Reviews with sentiment analysis |
 
-| `stg\_products` | Products with size categories | raw\_products |
+| stg\_products | Products with size categories |
 
-| `stg\_sellers` | Sellers with clean location data | raw\_sellers |
+| stg\_sellers | Sellers with clean location data |
 
-| `stg\_category\_translations` | PT to EN category mappings | raw\_category\_translations |
+| stg\_category\_translations | PT to EN category mappings |
 
 
 
@@ -434,35 +366,21 @@ dbt docs serve
 
 
 
-\#### Dimension Tables
+| Model | Type | Description |
 
+|-------|------|-------------|
 
+| dim\_customers | Dimension | Customers with segmentation (VIP/Repeat/One-time) |
 
-| Model | Description | Rows |
+| dim\_products | Dimension | Products with bilingual categories \& quality scores |
 
-|-------|-------------|------|
+| dim\_sellers | Dimension | Sellers with sales metrics \& tiers |
 
-| `dim\_customers` | Customers with segmentation (VIP/Repeat/One-time) | \~99,441 |
+| dim\_dates | Dimension | Date dimension (2016-2026) |
 
-| `dim\_products` | Products with bilingual categories \& quality scores | \~32,951 |
+| fact\_orders | Fact | Order-level metrics with FKs |
 
-| `dim\_sellers` | Sellers with sales metrics \& tiers | \~3,095 |
-
-| `dim\_dates` | Date dimension (2016-2026) | \~4,018 |
-
-
-
-\#### Fact Tables
-
-
-
-| Model | Grain | Description | Rows |
-
-|-------|-------|-------------|------|
-
-| `fact\_orders` | One row per order | Order-level metrics with FKs | \~99,441 |
-
-| `fact\_order\_items` | One row per item | Item-level details, joins all dimensions | \~112,650 |
+| fact\_order\_items | Fact | Item-level details, joins all dimensions |
 
 
 
@@ -470,7 +388,7 @@ dbt docs serve
 
 
 
-\## 🔍 Sample Queries
+\## Sample Queries
 
 
 
@@ -478,7 +396,7 @@ dbt docs serve
 
 
 
-```sql
+```
 
 SELECT 
 
@@ -508,7 +426,7 @@ LIMIT 10;
 
 
 
-```sql
+```
 
 SELECT 
 
@@ -532,7 +450,7 @@ ORDER BY customer\_count DESC;
 
 
 
-```sql
+```
 
 SELECT 
 
@@ -560,7 +478,7 @@ ORDER BY d.year, d.month;
 
 
 
-```sql
+```
 
 SELECT 
 
@@ -588,7 +506,7 @@ LIMIT 10;
 
 
 
-\## 📊 Key Business Insights Enabled
+\## Key Business Insights Enabled
 
 
 
@@ -596,17 +514,17 @@ This data warehouse enables answers to questions like:
 
 
 
-\- 🎯 \*\*Customer Analytics\*\*: Who are our VIP customers? What's our retention rate?
+\- Customer Analytics: Who are our VIP customers? What is our retention rate?
 
-\- 💰 \*\*Revenue Analysis\*\*: Which products/sellers/categories drive the most revenue?
+\- Revenue Analysis: Which products/sellers/categories drive the most revenue?
 
-\- 📦 \*\*Delivery Performance\*\*: What's our on-time delivery rate? Where do delays happen?
+\- Delivery Performance: What is our on-time delivery rate? Where do delays happen?
 
-\- 🌎 \*\*Geographic Insights\*\*: Which states/cities are our biggest markets?
+\- Geographic Insights: Which states/cities are our biggest markets?
 
-\- ⭐ \*\*Product Quality\*\*: Which products need better descriptions or photos?
+\- Product Quality: Which products need better descriptions or photos?
 
-\- 💳 \*\*Payment Patterns\*\*: How do customers prefer to pay? Installment usage?
+\- Payment Patterns: How do customers prefer to pay? Installment usage?
 
 
 
@@ -614,7 +532,7 @@ This data warehouse enables answers to questions like:
 
 
 
-\## 🎓 Key Learnings \& dbt Features Used
+\## Key Learnings and dbt Features Used
 
 
 
@@ -622,25 +540,25 @@ This data warehouse enables answers to questions like:
 
 
 
-\- ✅ \*\*Models\*\* - SQL files for transformations
+\- Models - SQL files for transformations
 
-\- ✅ \*\*Sources\*\* - YAML configuration for raw data
+\- Sources - YAML configuration for raw data
 
-\- ✅ \*\*ref() function\*\* - Automatic dependency tracking
+\- ref() function - Automatic dependency tracking
 
-\- ✅ \*\*source() function\*\* - Reference raw data
+\- source() function - Reference raw data
 
-\- ✅ \*\*Materializations\*\* - Views (staging) vs Tables (marts)
+\- Materializations - Views (staging) vs Tables (marts)
 
-\- ✅ \*\*CTEs\*\* - Modular, readable SQL
+\- CTEs - Modular, readable SQL
 
-\- ✅ \*\*Jinja templating\*\* - Dynamic SQL generation
+\- Jinja templating - Dynamic SQL generation
 
-\- ✅ \*\*Custom Macros\*\* - Reusable code (schema generation)
+\- Custom Macros - Reusable code (schema generation)
 
-\- ✅ \*\*YAML configuration\*\* - dbt\_project.yml setup
+\- YAML configuration - dbt\_project.yml setup
 
-\- ✅ \*\*Built-in tests\*\* - not\_null, unique on source columns
+\- Built-in tests - not\_null, unique on source columns
 
 
 
@@ -648,39 +566,21 @@ This data warehouse enables answers to questions like:
 
 
 
-\- ✅ \*\*Medallion Architecture\*\* (Raw → Staging → Marts)
+\- Medallion Architecture (Raw to Staging to Marts)
 
-\- ✅ \*\*Dimensional Modeling\*\* (Kimball star schema)
+\- Dimensional Modeling (Kimball star schema)
 
-\- ✅ \*\*Surrogate Keys\*\* for dimensions
+\- Surrogate Keys for dimensions
 
-\- ✅ \*\*Slowly Changing Dimensions\*\* (Type 1)
+\- Slowly Changing Dimensions (Type 1)
 
-\- ✅ \*\*Aggregation before joining\*\* (avoid row explosion)
+\- Aggregation before joining (avoid row explosion)
 
-\- ✅ \*\*Business logic in transformation layer\*\*
+\- Business logic in transformation layer
 
-\- ✅ \*\*Idempotent transformations\*\*
+\- Idempotent transformations
 
-\- ✅ \*\*Version control with Git\*\*
-
-
-
-\---
-
-
-
-\## 📁 Data Source
-
-
-
-\- \*\*Dataset\*\*: \[Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)
-
-\- \*\*Provider\*\*: Olist (largest Brazilian marketplace)
-
-\- \*\*Period\*\*: 2016-2018
-
-\- \*\*Volume\*\*: \~100,000 orders, 550,000+ total rows
+\- Version control with Git
 
 
 
@@ -688,25 +588,17 @@ This data warehouse enables answers to questions like:
 
 
 
-\## 🔮 Future Enhancements
+\## Data Source
 
 
 
-\- \[ ] Implement \*\*Snapshots\*\* for SCD Type 2 (track customer location changes)
+\- Dataset: Brazilian E-Commerce Public Dataset by Olist on Kaggle
 
-\- \[ ] Add \*\*Seeds\*\* for reference data (state regions, category groupings)
+\- Provider: Olist (largest Brazilian marketplace)
 
-\- \[ ] Build more \*\*custom macros\*\* for reusable transformations
+\- Period: 2016-2018
 
-\- \[ ] Add \*\*custom data quality tests\*\*
-
-\- \[ ] Implement \*\*incremental models\*\* for large facts
-
-\- \[ ] Set up \*\*CI/CD\*\* with GitHub Actions
-
-\- \[ ] Create \*\*dbt exposures\*\* for dashboard documentation
-
-\- \[ ] Add \*\*source freshness checks\*\*
+\- Volume: \~100,000 orders, 550,000+ total rows
 
 
 
@@ -714,9 +606,37 @@ This data warehouse enables answers to questions like:
 
 
 
+\## Future Enhancements
 
 
-⭐ \*\*If you found this project helpful, please star the repository!\*\*
+
+\- Implement Snapshots for SCD Type 2 (track customer location changes)
+
+\- Add Seeds for reference data (state regions, category groupings)
+
+\- Build more custom macros for reusable transformations
+
+\- Add custom data quality tests
+
+\- Implement incremental models for large facts
+
+\- Set up CI/CD with GitHub Actions
+
+\- Create dbt exposures for dashboard documentation
+
+\- Add source freshness checks
+
+
+
+\---
+
+
+
+\## Author
+
+
+
+Surakanti Meghana
 
 
 
