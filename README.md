@@ -52,23 +52,60 @@ Transforming raw CSV files from Kaggle's Olist dataset into a queryable star sch
 - Schema: `MARTS`
 
 ---
-
 ## ⭐ Star Schema Data Model
 
-### The Schema
+### Schema Diagram
 
-dim_customers (99,441)
-                      ↓
-                      ↓
-dim_products ←  fact_orders  → dim_sellers
-   (32,951)     (99,441)        (3,095)
-      ↓             ↓               ↓
-      ↓             ↓               ↓
-      ↓     fact_order_items        ↓
-      ↓        (112,650)            ↓
-      ↓             ↓               ↓
-      └─────→ dim_dates ←───────────┘
-              (4,018)
+The star schema connects fact tables in the center to dimension tables around them:
+
+     ┌────────────────────┐
+                │   dim_customers    │
+                │     (99,441)       │
+                └─────────┬──────────┘
+                          │
+                          │ FK
+                          ▼
+                          ┌──────────────────┐  ┌──────────────┐  ┌──────────────────┐
+
+│   dim_products   │  │ fact_orders  │  │   dim_sellers    │
+
+│     (32,951)     │◄─│   (99,441)   │─►│     (3,095)      │
+
+└─────────┬────────┘  └──────┬───────┘  └─────────┬────────┘
+
+│                  │                    │
+
+│                  │ 1:N                │
+
+│                  ▼                    │
+
+│     ┌─────────────────────┐          │
+
+└────►│  fact_order_items   │◄─────────┘
+
+│      (112,650)      │
+
+└──────────┬──────────┘
+
+│
+
+│ FK
+
+▼
+
+┌────────────────────┐
+
+│    dim_dates       │
+
+│      (4,018)       │
+
+└────────────────────┘
+
+### Relationships
+
+- **fact_orders** → links to dim_customers and dim_dates
+- **fact_order_items** → links to dim_products, dim_sellers, dim_dates, and fact_orders
+- All foreign keys use surrogate keys (integers) for fast joins
 
 ### Dimension Tables
 
