@@ -2,11 +2,11 @@
 
 
 
-\[!\[dbt](https://img.shields.io/badge/dbt-1.11-orange)](https://www.getdbt.com/)
+!\[dbt](https://img.shields.io/badge/dbt-1.11-orange)
 
-\[!\[Snowflake](https://img.shields.io/badge/Snowflake-Cloud-blue)](https://www.snowflake.com/)
+!\[Snowflake](https://img.shields.io/badge/Snowflake-Cloud-blue)
 
-\[!\[Python](https://img.shields.io/badge/Python-3.13-green)](https://www.python.org/)
+!\[Python](https://img.shields.io/badge/Python-3.13-green)
 
 
 
@@ -58,41 +58,29 @@ This project transforms raw Brazilian e-commerce data (\~550K rows across 8 sour
 
 
 
-\\`\\`\\`
+```
 
-┌─────────────────────────────────────────────────────────┐
+LAYER 1: RAW (Bronze)
 
-│  📦 LAYER 1: RAW (Bronze)                              │
+└── 8 source tables from Kaggle Olist dataset
 
-│  └─ 8 source tables from Kaggle Olist dataset          │
+&#x20;               ⬇
 
-│                                                         │
+LAYER 2: STAGING (Silver)
 
-│                       ⬇                                │
+└── 8 cleaned views with standardization
 
-│                                                         │
+&#x20;               ⬇
 
-│  🧹 LAYER 2: STAGING (Silver)                          │
+LAYER 3: MARTS (Gold)
 
-│  └─ 8 cleaned views with standardization               │
+└── Star schema for analytics
 
-│                                                         │
+&#x20;   • 4 Dimension tables
 
-│                       ⬇                                │
+&#x20;   • 2 Fact tables (different grains)
 
-│                                                         │
-
-│  📊 LAYER 3: MARTS (Gold)                              │
-
-│  └─ Star schema for analytics                          │
-
-│     • 4 Dimension tables                               │
-
-│     • 2 Fact tables (different grains)                 │
-
-└─────────────────────────────────────────────────────────┘
-
-\\`\\`\\`
+```
 
 
 
@@ -108,23 +96,35 @@ The project implements a \*\*Kimball star schema\*\* with 4 dimensions and 2 fac
 
 
 
-\*\*Dimensions:\*\*
-
-\- \\`dim\_customers\\` - Customer info with VIP/Repeat segmentation (99,441 rows)
-
-\- \\`dim\_products\\` - Products with bilingual categories (32,951 rows)
-
-\- \\`dim\_sellers\\` - Sellers with revenue tiers (3,095 rows)
-
-\- \\`dim\_dates\\` - Date dimension 2016-2026 (4,018 rows)
+\### Dimensions
 
 
 
-\*\*Facts:\*\*
+| Table | Description | Rows |
 
-\- \\`fact\_orders\\` - One row per order (99,441 rows)
+|-------|-------------|------|
 
-\- \\`fact\_order\_items\\` - One row per item (112,650 rows)
+| `dim\_customers` | Customer info with VIP/Repeat segmentation | 99,441 |
+
+| `dim\_products` | Products with bilingual categories | 32,951 |
+
+| `dim\_sellers` | Sellers with revenue tiers | 3,095 |
+
+| `dim\_dates` | Date dimension 2016-2026 | 4,018 |
+
+
+
+\### Facts
+
+
+
+| Table | Grain | Description | Rows |
+
+|-------|-------|-------------|------|
+
+| `fact\_orders` | One row per order | Order-level metrics | 99,441 |
+
+| `fact\_order\_items` | One row per item | Item-level details | 112,650 |
 
 
 
@@ -182,19 +182,19 @@ This follows \*\*Kimball's dimensional modeling\*\* best practices for handling 
 
 
 
-\\`\\`\\`
+```
 
 dbt-ecommerce-analytics/
 
-├── 📂 data/                              # Source CSV files (8 datasets)
+├── data/                              # Source CSV files (8 datasets)
 
-├── 📂 dbt\_project/
+├── dbt\_project/
 
 │   └── ecommerce\_analytics/
 
-│       ├── 📂 models/
+│       ├── models/
 
-│       │   ├── 📂 staging/                # 8 staging models
+│       │   ├── staging/                # 8 staging models
 
 │       │   │   ├── sources.yml
 
@@ -216,7 +216,7 @@ dbt-ecommerce-analytics/
 
 │       │   │
 
-│       │   └── 📂 marts/                  # 6 dimensional models
+│       │   └── marts/                  # 6 dimensional models
 
 │       │       ├── dim\_customers.sql
 
@@ -232,7 +232,7 @@ dbt-ecommerce-analytics/
 
 │       │
 
-│       ├── 📂 macros/                     # Reusable code
+│       ├── macros/                     # Reusable code
 
 │       │   └── generate\_schema\_name.sql
 
@@ -242,7 +242,7 @@ dbt-ecommerce-analytics/
 
 │
 
-├── 📂 src/                                # Python loading script
+├── src/                                # Python loading script
 
 │   └── load\_data\_to\_snowflake.py
 
@@ -254,7 +254,7 @@ dbt-ecommerce-analytics/
 
 └── README.md
 
-\\`\\`\\`
+```
 
 
 
@@ -282,13 +282,13 @@ dbt-ecommerce-analytics/
 
 
 
-\\`\\`\\`bash
+```bash
 
 git clone https://github.com/SurakantiMeghana26/dbt-ecommerce-analytics.git
 
 cd dbt-ecommerce-analytics
 
-\\`\\`\\`
+```
 
 
 
@@ -296,13 +296,13 @@ cd dbt-ecommerce-analytics
 
 
 
-\\`\\`\\`bash
+```bash
 
 pip install snowflake-connector-python pandas
 
 pip install dbt-snowflake
 
-\\`\\`\\`
+```
 
 
 
@@ -310,7 +310,7 @@ pip install dbt-snowflake
 
 
 
-\\`\\`\\`sql
+```sql
 
 USE ROLE ACCOUNTADMIN;
 
@@ -324,7 +324,7 @@ CREATE SCHEMA MARTS;
 
 CREATE SCHEMA SNAPSHOTS;
 
-\\`\\`\\`
+```
 
 
 
@@ -334,23 +334,27 @@ CREATE SCHEMA SNAPSHOTS;
 
 Set environment variables for security:
 
-\\`\\`\\`bash
+
+
+```bash
 
 export SNOWFLAKE\_USER='your\_username'
 
 export SNOWFLAKE\_PASSWORD='your\_password'
 
-\\`\\`\\`
+```
 
 
 
 Run the loading script:
 
-\\`\\`\\`bash
+
+
+```bash
 
 python src/load\_data\_to\_snowflake.py
 
-\\`\\`\\`
+```
 
 
 
@@ -358,7 +362,7 @@ python src/load\_data\_to\_snowflake.py
 
 
 
-\\`\\`\\`bash
+```bash
 
 cd dbt\_project/ecommerce\_analytics
 
@@ -388,7 +392,7 @@ dbt docs generate
 
 dbt docs serve
 
-\\`\\`\\`
+```
 
 
 
@@ -408,21 +412,21 @@ dbt docs serve
 
 |-------|-------------|--------|
 
-| \\`stg\_customers\\` | Cleaned customer info with UPPERCASE locations | raw\_customers |
+| `stg\_customers` | Cleaned customer info with UPPERCASE locations | raw\_customers |
 
-| \\`stg\_orders\\` | Orders with proper timestamps, delivery metrics | raw\_orders |
+| `stg\_orders` | Orders with proper timestamps, delivery metrics | raw\_orders |
 
-| \\`stg\_order\_items\\` | Items with calculated total costs | raw\_order\_items |
+| `stg\_order\_items` | Items with calculated total costs | raw\_order\_items |
 
-| \\`stg\_payments\\` | Payments with categorization | raw\_payments |
+| `stg\_payments` | Payments with categorization | raw\_payments |
 
-| \\`stg\_reviews\\` | Reviews with sentiment analysis | raw\_reviews |
+| `stg\_reviews` | Reviews with sentiment analysis | raw\_reviews |
 
-| \\`stg\_products\\` | Products with size categories | raw\_products |
+| `stg\_products` | Products with size categories | raw\_products |
 
-| \\`stg\_sellers\\` | Sellers with clean location data | raw\_sellers |
+| `stg\_sellers` | Sellers with clean location data | raw\_sellers |
 
-| \\`stg\_category\_translations\\` | PT → EN category mappings | raw\_category\_translations |
+| `stg\_category\_translations` | PT to EN category mappings | raw\_category\_translations |
 
 
 
@@ -438,13 +442,13 @@ dbt docs serve
 
 |-------|-------------|------|
 
-| \\`dim\_customers\\` | Customers with segmentation (VIP/Repeat/One-time) | \~99,441 |
+| `dim\_customers` | Customers with segmentation (VIP/Repeat/One-time) | \~99,441 |
 
-| \\`dim\_products\\` | Products with bilingual categories \& quality scores | \~32,951 |
+| `dim\_products` | Products with bilingual categories \& quality scores | \~32,951 |
 
-| \\`dim\_sellers\\` | Sellers with sales metrics \& tiers | \~3,095 |
+| `dim\_sellers` | Sellers with sales metrics \& tiers | \~3,095 |
 
-| \\`dim\_dates\\` | Date dimension (2016-2026) | \~4,018 |
+| `dim\_dates` | Date dimension (2016-2026) | \~4,018 |
 
 
 
@@ -456,9 +460,9 @@ dbt docs serve
 
 |-------|-------|-------------|------|
 
-| \\`fact\_orders\\` | One row per order | Order-level metrics with FKs | \~99,441 |
+| `fact\_orders` | One row per order | Order-level metrics with FKs | \~99,441 |
 
-| \\`fact\_order\_items\\` | One row per item | Item-level details, joins all dimensions | \~112,650 |
+| `fact\_order\_items` | One row per item | Item-level details, joins all dimensions | \~112,650 |
 
 
 
@@ -474,7 +478,7 @@ dbt docs serve
 
 
 
-\\`\\`\\`sql
+```sql
 
 SELECT 
 
@@ -496,7 +500,7 @@ ORDER BY total\_revenue DESC
 
 LIMIT 10;
 
-\\`\\`\\`
+```
 
 
 
@@ -504,7 +508,7 @@ LIMIT 10;
 
 
 
-\\`\\`\\`sql
+```sql
 
 SELECT 
 
@@ -520,7 +524,7 @@ GROUP BY customer\_segment
 
 ORDER BY customer\_count DESC;
 
-\\`\\`\\`
+```
 
 
 
@@ -528,7 +532,7 @@ ORDER BY customer\_count DESC;
 
 
 
-\\`\\`\\`sql
+```sql
 
 SELECT 
 
@@ -548,7 +552,7 @@ GROUP BY d.year, d.month\_name, d.month
 
 ORDER BY d.year, d.month;
 
-\\`\\`\\`
+```
 
 
 
@@ -556,7 +560,7 @@ ORDER BY d.year, d.month;
 
 
 
-\\`\\`\\`sql
+```sql
 
 SELECT 
 
@@ -576,7 +580,7 @@ ORDER BY state\_revenue DESC
 
 LIMIT 10;
 
-\\`\\`\\`
+```
 
 
 
@@ -710,37 +714,9 @@ This data warehouse enables answers to questions like:
 
 
 
-\## 📸 Screenshots
 
 
-
-\*Add screenshots of:\*
-
-\- Snowflake table view showing dim/fact tables
-
-\- dbt run output showing successful builds
-
-\- dbt docs generated documentation
-
-\- Sample query results
-
-
-
-\---
-
-
-
-\## 👨‍💻 Author
-
-
-
-\*\*Surakanti Meghana\*\*
-
-\- GitHub: \[@SurakantiMeghana26](https://github.com/SurakantiMeghana26)
-
-\---
-
-
+⭐ \*\*If you found this project helpful, please star the repository!\*\*
 
 
 
